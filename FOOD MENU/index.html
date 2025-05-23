@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Bites - Fast Food Restaurant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            color: #ff6b35;
+        }
+
+        .cart-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            position: relative;
+        }
+
+        .cart-btn:hover {
+            background: #e55a2b;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff0000;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/api/placeholder/1920/1080') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #ff6b35;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        /* About Section */
+        .about {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Menu Section */
+        .menu {
+            padding: 5rem 0;
+        }
+
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 2px solid #ff6b35;
+            color: #ff6b35;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+
+        .menu-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .menu-item p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .price-add {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .add-to-cart {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #e55a2b;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .info-item i {
+            color: #ff6b35;
+            margin-right: 1rem;
+            width: 20px;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #e55a2b;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+
+        .footer-section a:hover {
+            color: #ff6b35;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: #ccc;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #ff6b35;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+            color: #ccc;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .cart-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(0, 0, 0, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .menu-tabs {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .cart-content {
+                margin: 10% auto;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Tasty Bites</a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="cart-btn" id="cart-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Delicious Fast Food</h1>
+            <p>Experience the best taste with our premium quality fast food made with fresh ingredients</p>
+            <a href="#menu" class="cta-btn">Order Now</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">About Tasty Bites</h2>
+            <div class="about-content">
+                <div class="about-text animate-on-scroll">
+                    <h3>Our Story</h3>
+                    <p>Since 2010, Tasty Bites has been serving the community with delicious, high-quality fast food. We believe in using only the freshest ingredients and time-tested recipes to create meals that satisfy your cravings.</p>
+                    <p>Our commitment to quality and customer satisfaction has made us a favorite destination for food lovers. From our signature burgers to our crispy fries, every item on our menu is prepared with care and attention to detail.</p>
+                    <p>Join us for a dining experience that combines great food, friendly service, and a welcoming atmosphere.</p>
+                </div>
+                <img src="/api/placeholder/500/400" alt="Restaurant Interior" class="about-image animate-on-scroll">
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Our Menu</h2>
+            <div class="menu-tabs">
+                <button class="tab-btn active" data-tab="main-dishes">Main Dishes</button>
+                <button class="tab-btn" data-tab="side-dishes">Side Dishes</button>
+                <button class="tab-btn" data-tab="drinks">Drinks</button>
+            </div>
+
+            <!-- Main Dishes -->
+            <div class="tab-content active" id="main-dishes">
+                <div class="menu-grid">
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Classic Burger">
+                        <div class="menu-item-content">
+                            <h3>Classic Burger</h3>
+                            <p>Juicy beef patty with lettuce, tomato, and our special sauce</p>
+                            <div class="price-add">
+                                <span class="price">$8.99</span>
+                                <button class="add-to-cart" data-name="Classic Burger" data-price="8.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Chicken Sandwich">
+                        <div class="menu-item-content">
+                            <h3>Chicken Sandwich</h3>
+                            <p>Crispy chicken breast with fresh vegetables and mayo</p>
+                            <div class="price-add">
+                                <span class="price">$7.99</span>
+                                <button class="add-to-cart" data-name="Chicken Sandwich" data-price="7.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Fish Burger">
+                        <div class="menu-item-content">
+                            <h3>Fish Burger</h3>
+                            <p>Fresh fish fillet with tartar sauce and lettuce</p>
+                            <div class="price-add">
+                                <span class="price">$9.49</span>
+                                <button class="add-to-cart" data-name="Fish Burger" data-price="9.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="BBQ Bacon Burger">
+                        <div class="menu-item-content">
+                            <h3>BBQ Bacon Burger</h3>
+                            <p>Double beef patty with bacon, BBQ sauce, and cheese</p>
+                            <div class="price-add">
+                                <span class="price">$11.99</span>
+                                <button class="add-to-cart" data-name="BBQ Bacon Burger" data-price="11.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Veggie Burger">
+                        <div class="menu-item-content">
+                            <h3>Veggie Burger</h3>
+                            <p>Plant-based patty with fresh vegetables and avocado</p>
+                            <div class="price-add">
+                                <span class="price">$8.49</span>
+                                <button class="add-to-cart" data-name="Veggie Burger" data-price="8.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Chicken Wings">
+                        <div class="menu-item-content">
+                            <h3>Chicken Wings</h3>
+                            <p>Spicy buffalo wings served with ranch dressing</p>
+                            <div class="price-add">
+                                <span class="price">$10.99</span>
+                                <button class="add-to-cart" data-name="Chicken Wings" data-price="10.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Pizza Slice">
+                        <div class="menu-item-content">
+                            <h3>Pizza Slice</h3>
+                            <p>Pepperoni pizza slice with melted cheese</p>
+                            <div class="price-add">
+                                <span class="price">$4.99</span>
+                                <button class="add-to-cart" data-name="Pizza Slice" data-price="4.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Hot Dog">
+                        <div class="menu-item-content">
+                            <h3>Hot Dog</h3>
+                            <p>Classic hot dog with mustard, ketchup, and onions</p>
+                            <div class="price-add">
+                                <span class="price">$5.49</span>
+                                <button class="add-to-cart" data-name="Hot Dog" data-price="5.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Chicken Wrap">
+                        <div class="menu-item-content">
+                            <h3>Chicken Wrap</h3>
+                            <p>Grilled chicken wrapped with fresh vegetables</p>
+                            <div class="price-add">
+                                <span class="price">$7.49</span>
+                                <button class="add-to-cart" data-name="Chicken Wrap" data-price="7.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Dishes -->
+            <div class="tab-content" id="side-dishes">
+                <div class="menu-grid">
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="French Fries">
+                        <div class="menu-item-content">
+                            <h3>French Fries</h3>
+                            <p>Crispy golden fries seasoned with salt</p>
+                            <div class="price-add">
+                                <span class="price">$3.99</span>
+                                <button class="add-to-cart" data-name="French Fries" data-price="3.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Onion Rings">
+                        <div class="menu-item-content">
+                            <h3>Onion Rings</h3>
+                            <p>Crispy battered onion rings served hot</p>
+                            <div class="price-add">
+                                <span class="price">$4.49</span>
+                                <button class="add-to-cart" data-name="Onion Rings" data-price="4.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Mozzarella Sticks">
+                        <div class="menu-item-content">
+                            <h3>Mozzarella Sticks</h3>
+                            <p>Breaded mozzarella sticks with marinara sauce</p>
+                            <div class="price-add">
+                                <span class="price">$5.99</span>
+                                <button class="add-to-cart" data-name="Mozzarella Sticks" data-price="5.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Chicken Nuggets">
+                        <div class="menu-item-content">
+                            <h3>Chicken Nuggets</h3>
+                            <p>Crispy chicken nuggets with dipping sauce</p>
+                            <div class="price-add">
+                                <span class="price">20.49</span>
+                                <button class="add-to-cart" data-name="Chicken Nuggets" data-price="6.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Coleslaw">
+                        <div class="menu-item-content">
+                            <h3>Coleslaw</h3>
+                            <p>Fresh cabbage salad with creamy dressing</p>
+                            <div class="price-add">
+                                <span class="price">$2.99</span>
+                                <button class="add-to-cart" data-name="Coleslaw" data-price="2.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Loaded Nachos">
+                        <div class="menu-item-content">
+                            <h3>Loaded Nachos</h3>
+                            <p>Tortilla chips with cheese, jalapeños, and sour cream</p>
+                            <div class="price-add">
+                                <span class="price">$7.99</span>
+                                <button class="add-to-cart" data-name="Loaded Nachos" data-price="7.99">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drinks -->
+            <div class="tab-content" id="drinks">
+                <div class="menu-grid">
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Coca Cola">
+                        <div class="menu-item-content">
+                            <h3>Coca Cola</h3>
+                            <p>Classic refreshing cola drink</p>
+                            <div class="price-add">
+                                <span class="price">$2.49</span>
+                                <button class="add-to-cart" data-name="Coca Cola" data-price="2.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Orange Juice">
+                        <div class="menu-item-content">
+                            <h3>Orange Juice</h3>
+                            <p>Fresh squeezed orange juice</p>
+                            <div class="price-add">
+                                <span class="price">$3.49</span>
+                                <button class="add-to-cart" data-name="Orange Juice" data-price="3.49">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item animate-on-scroll">
+                        <img src="/api/placeholder/300/200" alt="Milkshake">
+                        <div class="menu-item-content">
+                            <h3>Chocolate Milkshake</h3>
+                            <p>Creamy chocolate milkshake with whipped cream</p>
+                            <div class="price-add">
+                                <span class="price">$4.99</span>
+                                <button class="add-

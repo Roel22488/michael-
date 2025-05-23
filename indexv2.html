@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vern's Eatery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url('FOOD MENU/gettyimages-1267620410-640x640.jpg'); /* Your image file */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-bottom: 80px;
+    color: #333;
+    }
+
+    nav {
+      background: #333;
+      color: white;
+      padding: 10px 20px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav ul li {
+      margin-right: 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    section {
+      padding: 30px 20px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .menu-section ul {
+      list-style: none;
+    }
+
+    .menu-section li {
+      background: white;
+      margin: 10px 0;
+      padding: 15px;
+      border-left: 5px solid tomato;
+      cursor: pointer;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+
+    #item-modal, #checkout-page, #thank-you-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-content, .checkout-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .modal-content img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .modal-content input {
+      width: 60px;
+      margin: 10px;
+      padding: 5px;
+    }
+
+    #cart-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: tomato;
+      color: white;
+      padding: 15px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+
+    #cart-panel {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: white;
+      width: 300px;
+      max-height: 400px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      padding: 15px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    #checkout-page input[type="text"],
+    #checkout-page input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 10px 5px 0 5px;
+      background: tomato;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .thank-you {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <section id="home">
+    <h2>Welcome to Vern's Eatery</h2>
+    <p>Delicious food for every mood.</p>
+  </section>
+
+  <section id="about">
+    <h2>About Us</h2>
+    <p>We serve handcrafted meals with passion and care, straight from our kitchen to your table.</p>
+  </section>
+
+  <section id="menu" class="menu-section">
+    <h2>Menu</h2>
+
+   
+<ul>
+  <li data-name="Ham and Rice" data-price="35.00" data-image="FOOD MENU/ham and rice.jpg">Ham and Rice - ₱35.00</li>
+  <li data-name="sisig with rice" data-price="30.00" data-image="FOOD MENU/sisig with rice.jpg">sisig with rice - ₱80.00</li>
+  <li data-name="longganisa with rice" data-price="120.00" data-image="FOOD MENU/longganisa with rice.jpg">longganisa with rice - ₱35.00</li>
+  <li data-name="siomai with rice" data-price="150.00" data-image="FOOD MENU/siomai rice.jpg">siomai rice - ₱35.00</li>
+  <li data-name="coffe" data-price="70.00" data-image="FOOD MENU/coofee.jpg">coffe - ₱12.00</li>
+  <li data-name="Cornbeef with Rice" data-price="45.00" data-image="FOOD MENU/cornbeff with rice.jpg">Cornbeef with Rice - ₱45.00</li>
+  <li data-name="gulaman juice" data-price="20.00" data-image="FOOD MENU/gulaman.jpg">gulaman juice - ₱10.00</li>
+  <li data-name="soft drinks" data-price="25.00" data-image="FOOD MENU/sofdrinks.jpg">Soft Drinks - ₱25.00</li>
+  <li data-name="pancit canton" data-price="25.00" data-image="FOOD MENU/pancit cantoon.jpg">pancit canton - ₱30.00</li>
+  <li data-name="empanada" data-price="25.00" data-image="FOOD MENU/empanada.jpg">empanada - ₱12.00</li>
+  <li data-name="noodles" data-price="25.00" data-image="FOOD MENU/noodles.jpg">noodles - ₱25.00</li>
+  <li data-name="tapa with rice" data-price="25.00" data-image="FOOD MENU/tapa.jpg">tapa with rice - ₱80.00</li>
+  <li data-name="hotdog with rice" data-price="25.00" data-image="FOOD MENU/hotdog.jpg">hotdog with rice - 35.00</li>
+</ul>
+
+
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>📞 09360564871 | 📍 Asingan Town Plaza, Asingan, Pangasinan</p>
+  </section>
+
+  <!-- Floating Cart -->
+  <div id="cart-button">🛒 Cart (0)</div>
+  <div id="cart-panel">
+    <h3>Your Cart</h3>
+    <div id="cart-items"></div>
+    <div id="cart-total"></div>
+    <button id="checkout-btn">Checkout</button>
+  </div>
+
+  <!-- Item Modal -->
+  <div id="item-modal">
+    <div class="modal-content">
+      <img id="modal-img" src="" alt="item image" />
+      <h3 id="modal-name"></h3>
+      <p id="modal-price"></p>
+      <label>Qty: <input type="number" id="modal-qty" value="1" min="1" /></label>
+      <button id="modal-add-btn">Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- Checkout Page -->
+  <div id="checkout-page">
+    <div class="checkout-content">
+      <h3>Checkout</h3>
+      <div id="checkout-items"></div>
+      <p id="checkout-total"></p>
+      <input type="text" id="address" placeholder="Delivery Address" />
+      <label><input type="radio" name="payment" value="COD" checked /> Cash on Delivery</label><br/>
+      <label><input type="radio" name="payment" value="Card" /> Credit Card</label>
+      <div id="card-info" style="display: none;">
+        <input type="text" placeholder="Card Number" /><br/>
+        <input type="text" placeholder="Cardholder Name" /><br/>
+        <input type="text" placeholder="Expiry Date (MM/YY)" /><br/>
+      </div>
+      <button id="complete-order">Complete Order</button>
+      <button id="back-menu">Back to Menu</button>
+    </div>
+  </div>
+
+  <!-- Thank You Popup -->
+  <div id="thank-you-popup">
+    <div class="thank-you">
+      <h2>Thank you for your order!</h2>
+      <p>We are preparing your food now.</p>
+      <button onclick="closeThankYou()">Back to Home</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('item-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalName = document.getElementById('modal-name');
+    const modalPrice = document.getElementById('modal-price');
+    const modalQty = document.getElementById('modal-qty');
+    const addToCartBtn = document.getElementById('modal-add-btn');
+
+    const cart = [];
+
+    document.querySelectorAll('.menu-section li').forEach(item => {
+      item.addEventListener('click', () => {
+        const name = item.dataset.name;
+        const price = parseFloat(item.dataset.price);
+        const image = item.dataset.image;
+
+        modalName.textContent = name;
+        modalPrice.textContent = `₱${price.toFixed(2)}`;
+        modalImg.src = image;
+        addToCartBtn.dataset.name = name;
+        addToCartBtn.dataset.price = price;
+        modalQty.value = 1;
+        modal.style.display = 'flex';
+      });
+    });
+
+    addToCartBtn.addEventListener('click', () => {
+      const name = addToCartBtn.dataset.name;
+      const price = parseFloat(addToCartBtn.dataset.price);
+      const qty = parseInt(modalQty.value);
+
+      const existing = cart.find(i => i.name === name);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ name, price, qty });
+      }
+
+      modal.style.display = 'none';
+      updateCartDisplay();
+    });
+
+    function updateCartDisplay() {
+      const cartItems = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      const cartButton = document.getElementById('cart-button');
+      cartItems.innerHTML = '';
+      let total = 0;
+      let count = 0;
+      cart.forEach(item => {
+        total += item.qty * item.price;
+        count += item.qty;
+        const p = document.createElement('p');
+        p.textContent = `${item.name} x${item.qty} - ₱${(item.qty * item.price).toFixed(2)}`;
+        cartItems.appendChild(p);
+      });
+      cartTotal.textContent = `Total: ₱${total.toFixed(2)}`;
+      cartButton.textContent = `🛒 Cart (${count})`;
+    }
+
+    document.getElementById('cart-button').addEventListener('click', () => {
+      document.getElementById('cart-panel').style.display =
+        document.getElementById('cart-panel').style.display === 'block' ? 'none' : 'block';
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      document.getElementById('checkout-page').style.display = 'flex';
+      const items = document.getElementById('checkout-items');
+      const total = document.getElementById('checkout-total');
+      let t = 0;
+      items.innerHTML = '';
+      cart.forEach(i => {
+        const div = document.createElement('div');
+        div.textContent = `${i.name} x${i.qty} - ₱${(i.qty * i.price).toFixed(2)}`;
+        items.appendChild(div);
+        t += i.qty * i.price;
+      });
+      total.textContent = `Total: ₱${t.toFixed(2)}`;
+    });
+
+    document.querySelectorAll('input[name="payment"]').forEach(el => {
+      el.addEventListener('change', () => {
+        document.getElementById('card-info').style.display = el.value === 'Card' ? 'block' : 'none';
+      });
+    });
+
+    document.getElementById('complete-order').addEventListener('click', () => {
+      document.getElementById('checkout-page').style.display = 'none';
+      document.getElementById('thank-you-popup').style.display = 'flex';
+    });
+
+    document.getElementById('back-menu').addEventListener('click', () => {
+      document.getElementById('checkout-page').style.display = 'none';
+    });
+
+    function closeThankYou() {
+      document.getElementById('thank-you-popup').style.display = 'none';
+      cart.length = 0;
+      updateCartDisplay();
+    }
+  </script>
+</body>
+</html>
